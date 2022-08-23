@@ -1,5 +1,6 @@
 import Coupon from './Coupon'
 import Cpf from './Cpf'
+import FreightCalculator from './FreightCalculator'
 import Item from './Item'
 import OrderItem from './OrderItem'
 
@@ -7,6 +8,7 @@ export default class Order {
   orderItems: OrderItem[]
   cpf: Cpf
   coupon?: Coupon
+  freight = 0
 
   constructor(cpf: string, readonly date: Date = new Date()) {
     this.cpf = new Cpf(cpf)
@@ -14,8 +16,11 @@ export default class Order {
   }
 
   addItem(item: Item, quantity: number): void {
-    if (quantity <= 0) throw new Error('Invalid quantity')
+    if (this.orderItems.some(orderItem => orderItem.idItem === item.idItem)) {
+      throw new Error('Duplicated item')
+    }
     this.orderItems.push(new OrderItem(item.idItem, item.price, quantity))
+    this.freight += FreightCalculator.calculate(item) * quantity
   }
 
   addCoupon(coupon: Coupon): void {
@@ -30,6 +35,9 @@ export default class Order {
     }, 0)
     if (this.coupon) {
       total -= this.coupon.getDiscount(total)
+    }
+    if (this.freight) {
+      return (total += this.freight)
     }
     return total
   }

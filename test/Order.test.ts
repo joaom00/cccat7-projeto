@@ -1,4 +1,5 @@
 import Coupon from '@/Coupon'
+import Dimension from '@/Dimension'
 import Item from '@/Item'
 import Order from '@/Order'
 
@@ -44,4 +45,19 @@ it('Deve criar um pedido com 3 itens com cupom de desconto expirado', () => {
 it('Não deve fazer um pedido com quantidade de item negativa', () => {
   const order = new Order('886.634.854-68')
   expect(() => order.addItem(new Item(1, 'Guitarra', 1000), -1)).toThrow('Invalid quantity')
+})
+
+it('Não deve fazer um pedido com item duplicado', () => {
+  const order = new Order('886.634.854-68')
+  order.addItem(new Item(1, 'Guitarra', 1000), 1)
+  expect(() => order.addItem(new Item(1, 'Guitarra', 1000), 1)).toThrow('Duplicated item')
+})
+
+it('Deve criar um pedido com 3 itens e calcular o frete', () => {
+  const order = new Order('886.634.854-68')
+  order.addItem(new Item(1, 'Guitarra', 1000, new Dimension(100, 30, 10, 3)), 1)
+  order.addItem(new Item(2, 'Amplificador', 5000, new Dimension(50, 50, 50, 20)), 1)
+  order.addItem(new Item(3, 'Cabo', 30, new Dimension(10, 10, 10, 1)), 3)
+  const total = order.getTotal()
+  expect(total).toBe(6350)
 })
