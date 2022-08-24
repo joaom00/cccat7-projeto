@@ -1,9 +1,5 @@
-import pgp from 'pg-promise'
-import Dimension from './Dimension'
-import Item from './Item'
-import Order from './Order'
-
-const connection = pgp()('postgres://postgres:123456@localhost:5432/app')
+import ItemRepositoryDatabase from './ItemRepositoryDatabase'
+import PreviewOrder from './PreviewOrder'
 
 let cpf = ''
 const orderItems: Array<{ idItem: number; quantity: number }> = []
@@ -18,19 +14,9 @@ process.stdin.on('data', async chunk => {
     orderItems.push({ idItem: parseInt(idItem), quantity: parseInt(quantity) })
   }
   if (command.startsWith('preview')) {
-    const order = new Order(cpf)
-    for (const orderItem of orderItems) {
-      const [itemData] = await connection.query('select * from ccca.item where id_item = $1', [
-        orderItem.idItem
-      ])
-      const item = new Item(
-        itemData.id_item,
-        itemData.description,
-        parseFloat(itemData.price),
-        new Dimension(itemData.width, itemData.height, itemData.length, itemData.weight)
-      )
-      order.addItem(item, orderItem.quantity)
-    }
-    console.log('total:', order.getTotal())
+    const itemRepository = new ItemRepositoryDatabase()
+    const previewOrder = new PreviewOrder(itemRepository)
+    const output = await previewOrder.execute({ cpf, orderItems })
+    console.log('total:', output.total)
   }
 })
