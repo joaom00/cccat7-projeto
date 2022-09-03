@@ -1,15 +1,8 @@
-import express from 'express'
-import ItemRepositoryMemory from './ItemRepositoryMemory'
-import PreviewOrder from './PreviewOrder'
+import ExpressAdapter from './ExpressAdapter'
+import PgPromiseAdapter from './PgPromiseAdapter'
+import Router from './Router'
 
-const app = express()
-app.use(express.json())
-
-app.post('/orderPreview/:postId', async (req, res) => {
-  const itemRepository = new ItemRepositoryMemory()
-  const previewOrder = new PreviewOrder(itemRepository)
-  const output = await previewOrder.execute(req.body)
-  res.json(output)
-})
-
-app.listen(3000)
+const http = new ExpressAdapter()
+const connection = new PgPromiseAdapter()
+new Router(http, connection)
+http.listen(3000)
