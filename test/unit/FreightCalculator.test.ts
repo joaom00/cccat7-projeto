@@ -1,6 +1,6 @@
-import Dimension from '@/Dimension'
-import FreightCalculator from '@/FreightCalculator'
-import Item from '@/Item'
+import Dimension from "@/domain/entities/Dimension"
+import FreightCalculator from "@/domain/entities/FreightCalculator"
+import Item from "@/domain/entities/Item"
 
 it('Deve calcular o frete', () => {
   const item = new Item(1, 'Guitarra', 1000, new Dimension(100, 30, 10, 3))

@@ -1,4 +1,4 @@
-import Dimension from '@/Dimension'
+import Dimension from "@/domain/entities/Dimension"
 
 it('Não deve ter largura negativa', () => {
   expect(() => new Dimension(-1, 0, 0, 0)).toThrow(new Error('Invalid dimension'))

@@ -1,4 +1,4 @@
-import Coupon from '@/Coupon'
+import Coupon from "@/domain/entities/Coupon"
 
 it('Deve criar um cupom de desconto', () => {
   const coupon = new Coupon('VALE20', 20, new Date('2022-03-01T10:00:00'))

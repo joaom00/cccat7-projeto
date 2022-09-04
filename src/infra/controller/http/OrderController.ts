@@ -1,7 +1,7 @@
-import Connection from './Connection'
-import Http from './Http'
-import ItemRepositoryMemory from './ItemRepositoryMemory'
-import PreviewOrder from './PreviewOrder'
+import PreviewOrder from "@/application/PreviewOrder"
+import Connection from "@/infra/database/Connection"
+import Http from "@/infra/http/Http"
+import ItemRepositoryMemory from "@/infra/repository/memory/ItemRepositoryMemory"
 
 export default class Router {
   constructor(readonly http: Http, private connection: Connection) {

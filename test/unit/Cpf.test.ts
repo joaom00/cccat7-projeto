@@ -1,4 +1,4 @@
-import Cpf from '@/Cpf'
+import Cpf from "@/domain/entities/Cpf"
 
 const validCPFs = ['886.634.854-68', '47308766870']
 

@@ -1,7 +1,7 @@
-import Coupon from '@/Coupon'
-import Dimension from '@/Dimension'
-import Item from '@/Item'
-import Order from '@/Order'
+import Coupon from '@/domain/entities/Coupon'
+import Dimension from '@/domain/entities/Dimension'
+import Item from '@/domain/entities/Item'
+import Order from '@/domain/entities/Order'
 
 it('Deve criar um pedido vazio', () => {
   const order = new Order('886.634.854-68')
@@ -60,4 +60,13 @@ it('Deve criar um pedido com 3 itens e calcular o frete', () => {
   order.addItem(new Item(3, 'Cabo', 30, new Dimension(10, 10, 10, 1)), 3)
   const total = order.getTotal()
   expect(total).toBe(6350)
+})
+
+it('Deve criar um pedido e gerar o código', () => {
+  const order = new Order('886.634.854-68', new Date('2022-03-01T10:00:00'), 1)
+  order.addItem(new Item(1, 'Guitarra', 1000, new Dimension(100, 30, 10, 3)), 1)
+  order.addItem(new Item(2, 'Amplificador', 5000, new Dimension(50, 50, 50, 20)), 1)
+  order.addItem(new Item(3, 'Cabo', 30, new Dimension(10, 10, 10, 1)), 3)
+  const code = order.getCode()
+  expect(code).toBe('202200000001')
 })

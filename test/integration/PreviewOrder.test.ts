@@ -1,6 +1,5 @@
-import ItemRepositoryDatabase from '@/ItemRepositoryDatabase'
-import ItemRepositoryMemory from '@/ItemRepositoryMemory'
-import PreviewOrder from '@/PreviewOrder'
+import PreviewOrder from "@/application/PreviewOrder"
+import ItemRepositoryMemory from "@/infra/repository/memory/ItemRepositoryMemory"
 
 it('Deve simular um pedido', async () => {
   // const itemRepository = new ItemRepositoryDatabase()
