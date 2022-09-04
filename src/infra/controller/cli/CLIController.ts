@@ -1,10 +1,10 @@
 import PreviewOrder from '@/application/PreviewOrder'
 import CLIManager from '@/infra/cli/CLIManager'
-import PgPromiseAdapter from '@/infra/database/PgPromiseAdapter'
+import Connection from '@/infra/database/Connection'
 import ItemRepositoryDatabase from '@/infra/repository/database/ItemRepositoryDatabase'
 
 export default class CLIController {
-  constructor(cliManager: CLIManager) {
+  constructor(cliManager: CLIManager, readonly connection: Connection) {
     let cpf = ''
     const orderItems: { idItem: number; quantity: number }[] = []
 
@@ -18,7 +18,6 @@ export default class CLIController {
     })
 
     cliManager.addCommand('preview', async () => {
-      const connection = new PgPromiseAdapter()
       const itemRepository = new ItemRepositoryDatabase(connection)
       const previewOrder = new PreviewOrder(itemRepository)
       const input = { cpf, orderItems }

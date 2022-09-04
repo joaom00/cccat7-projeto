@@ -1,4 +1,5 @@
-import InputDevice from "./InputDevice"
+import InputDevice from './InputDevice'
+import OutputDevice from './OutputDevice'
 
 type Output = string | Uint8Array | void
 type CommandName = string
@@ -7,12 +8,11 @@ type CommandCallback = (params: string) => Output | Promise<Output>
 export default class CLIManager {
   commands: Record<CommandName, CommandCallback>
 
-  constructor(inputDevice: InputDevice) {
+  constructor(inputDevice: InputDevice, readonly outputDevice: OutputDevice) {
     this.commands = {}
     inputDevice.onData(async chunk => {
-
       const command = chunk.toString()
-      await this.execute(command)
+      await this.type(command)
     })
   }
 
@@ -24,8 +24,11 @@ export default class CLIManager {
     const [name] = command.split(' ')
     const params = command.replace(name + ' ', '')
     const output = await this.commands[name.trim()](params)
-    if (output) {
-      process.stdout.write(output)
-    }
+    return output
+  }
+
+  async type(text: string) {
+    const output = await this.execute(text)
+    if (output) this.outputDevice.write(output)
   }
 }

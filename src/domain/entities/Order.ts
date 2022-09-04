@@ -12,7 +12,7 @@ export default class Order {
   freight = 0
   private code: OrderCode
 
-  constructor(cpf: string, private date: Date = new Date(), readonly sequence: number) {
+  constructor(cpf: string, readonly date: Date = new Date(), readonly sequence: number = 1) {
     this.cpf = new Cpf(cpf)
     this.orderItems = []
     this.code = new OrderCode(date, sequence)
@@ -31,7 +31,7 @@ export default class Order {
   }
 
   addCoupon(coupon: Coupon): void {
-    if (coupon?.isExpired(this.date)) return
+    if (coupon.isExpired(this.date)) return
     this.coupon = coupon
   }
 
